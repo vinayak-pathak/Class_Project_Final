@@ -1,0 +1,86 @@
+---
+title: "main.Rmd"
+author: "Vinayak Pathak"
+date: "9/26/2020"
+output: html_document
+---
+Install the basic R libraries
+```{r eval=FALSE}
+install.packages("dplyr")
+install.packages("tidyverse")
+```
+Installing the appropriate dependent libraries
+```{r eval=FALSE}
+install.packages("pracma")
+install.packages("psych")
+install.packages("SynchWave")
+install.packages("corrplot")
+```
+Loading the appropriate libraries for the project
+```{r}
+library(psych)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(pracma)
+library(SynchWave)
+library(corrplot)
+```
+
+```{r}
+data1<-read.csv(file="/Users/vinayakpathak/Desktop/Project_Dataset/dataset_Final/final/datasets/eda/wesad/combined/classification/wesad-chest-combined-classification-eda.csv", header=TRUE)
+```
+Plotting the correlation plot
+
+```{r}
+df_modified<-data1 %>%
+  select(condition.label, SSSQ.Label, MEAN)
+```
+```{r}
+M<-mixedCor(df_modified)
+corrplot(M$rho, method = "number", lower.col="black")
+```
+
+Further Agenda is to perform, Ranndom forest and PCA somehow
+```{r}
+eda_train = read.csv(file="/Users/vinayakpathak/Desktop/Project_Dataset/dataset_Final/final/datasets/eda/wesad/combined/classification/wesad-classification-eda-train-dataset.csv", header=TRUE)
+```
+```{r}
+eda_test = read.csv(file="/Users/vinayakpathak/Desktop/Project_Dataset/dataset_Final/final/datasets/eda/wesad/combined/classification/wesad-classification-eda-test-dataset.csv", header=TRUE)
+```
+```{r}
+eda_valid = read.csv(file="/Users/vinayakpathak/Desktop/Project_Dataset/dataset_Final/final/datasets/eda/wesad/combined/classification/wesad-classification-eda-validation-dataset.csv", header=TRUE)
+```
+Reading in the raw data from patient1
+```{r}
+raw_data2["signal"]<-read.csv(file="/Users/vinayakpathak/Desktop/Project_Dataset/WESAD/S2/S2_E4_Data/EDA.csv")
+```
+```{r}
+raw_data2["no"]<-c(1:dim(raw_data2)[1])
+```
+```{r}
+raw_data2<-raw_data2 %>%
+  select(signal, no)
+```
+```{r}
+p<-ggplot(raw_data2,aes(x=no, y=signal))+geom_line()
+plot(p)
+```
+```{r}
+raw_data2["fft_transform"]<-abs(fftshift(fft(raw_data2[["signal"]])))
+```
+Mean centering the data
+```{r}
+mu = mean(raw_data2[["no"]])
+```
+```{r}
+
+raw_data2<-raw_data2 %>% 
+  select(no, signal, fft_transform) %>%
+  mutate(x_transf = no-mu)
+```
+
+```{r}
+p2<-ggplot(raw_data2,aes(x=x_transf, y=fft_transform))+geom_line()
+plot(p2)+scale_x_continuous(limits = c(-50, 50))
+```
