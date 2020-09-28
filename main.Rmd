@@ -16,6 +16,9 @@ install.packages("psych")
 install.packages("SynchWave")
 install.packages("corrplot")
 ```
+```{r eval=FALSE}
+install.packages("rmatio")
+```
 Loading the appropriate libraries for the project
 ```{r}
 library(psych)
@@ -25,10 +28,11 @@ library(ggplot2)
 library(pracma)
 library(SynchWave)
 library(corrplot)
+library(rmatio)
 ```
 
 ```{r}
-data1<-read.csv(file="/Users/vinayakpathak/Desktop/Project_Dataset/dataset_Final/final/datasets/eda/wesad/combined/classification/wesad-chest-combined-classification-eda.csv", header=TRUE)
+data1<-read.csv(file="C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\dataset_Final\\final\\datasets\\eda\\wesad\\combined\\classification\\wesad-chest-combined-classification-eda.csv", header=TRUE)
 ```
 Plotting the correlation plot
 
@@ -41,22 +45,28 @@ M<-mixedCor(df_modified)
 corrplot(M$rho, method = "number", lower.col="black")
 ```
 
-Further Agenda is to perform, Ranndom forest and PCA somehow
+Further Agenda is to perform, Random forest and PCA somehow
 ```{r}
-eda_train = read.csv(file="/Users/vinayakpathak/Desktop/Project_Dataset/dataset_Final/final/datasets/eda/wesad/combined/classification/wesad-classification-eda-train-dataset.csv", header=TRUE)
+eda_train = read.csv(file="C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\dataset_Final\\final\\datasets\\eda\\wesad\\combined\\classification\\wesad-classification-eda-train-dataset.csv", header=TRUE)
 ```
 ```{r}
-eda_test = read.csv(file="/Users/vinayakpathak/Desktop/Project_Dataset/dataset_Final/final/datasets/eda/wesad/combined/classification/wesad-classification-eda-test-dataset.csv", header=TRUE)
+eda_test = read.csv(file="C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\dataset_Final\\final\\datasets\\eda\\wesad\\combined\\classification\\wesad-classification-eda-test-dataset.csv", header=TRUE)
 ```
 ```{r}
-eda_valid = read.csv(file="/Users/vinayakpathak/Desktop/Project_Dataset/dataset_Final/final/datasets/eda/wesad/combined/classification/wesad-classification-eda-validation-dataset.csv", header=TRUE)
+eda_valid = read.csv(file="C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\dataset_Final\\final\\datasets\\eda\\wesad\\combined\\classification\\wesad-classification-eda-validation-dataset.csv", header=TRUE)
 ```
 Reading in the raw data from patient1
 ```{r}
-raw_data2["signal"]<-read.csv(file="/Users/vinayakpathak/Desktop/Project_Dataset/WESAD/S2/S2_E4_Data/EDA.csv")
+
 ```
 ```{r}
-raw_data2["no"]<-c(1:dim(raw_data2)[1])
+signal<-read.csv(file="C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S2\\S2_E4_Data\\EDA.csv", )
+names(signal)<-c("signal")
+raw_data2<-signal
+```
+
+```{r}
+raw_data2[["no"]]<-c(1:dim(raw_data2)[1])
 ```
 ```{r}
 raw_data2<-raw_data2 %>%
@@ -83,4 +93,180 @@ raw_data2<-raw_data2 %>%
 ```{r}
 p2<-ggplot(raw_data2,aes(x=x_transf, y=fft_transform))+geom_line()
 plot(p2)+scale_x_continuous(limits = c(-50, 50))
+```
+Reading S2
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S2.mat")
+```
+```{r}
+S2<-data.frame(temp[["signal_final"]])
+names(S2)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S2[,i]<-as.numeric(S2[,i])
+```
+Reading S3
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S3.mat")
+```
+```{r}
+S3<-data.frame(temp[["signal_final"]])
+names(S3)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S3[,i]<-as.numeric(S3[,i])
+```
+Reading S4
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S4.mat")
+```
+```{r}
+S4<-data.frame(temp[["signal_final"]])
+names(S4)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S4[,i]<-as.numeric(S4[,i])
+```
+Reading S5
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S5.mat")
+```
+```{r}
+S5<-data.frame(temp[["signal_final"]])
+names(S5)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S5[,i]<-as.numeric(S5[,i])
+```
+Reading S6
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S6.mat")
+```
+```{r}
+S6<-data.frame(temp[["signal_final"]])
+names(S6)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S6[,i]<-as.numeric(S6[,i])
+```
+Reading S7
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S7.mat")
+```
+```{r}
+S7<-data.frame(temp[["signal_final"]])
+names(S7)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S7[,i]<-as.numeric(S7[,i])
+```
+Reading S8
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S8.mat")
+```
+```{r}
+S8<-data.frame(temp[["signal_final"]])
+names(S8)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S8[,i]<-as.numeric(S8[,i])
+```
+Reading S9
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S9.mat")
+```
+```{r}
+S9<-data.frame(temp[["signal_final"]])
+names(S9)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S9[,i]<-as.numeric(S9[,i])
+```
+Reading S10
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S10.mat")
+```
+```{r}
+S10<-data.frame(temp[["signal_final"]])
+names(S10)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S10[,i]<-as.numeric(S10[,i])
+```
+Reading S11
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S11.mat")
+```
+```{r}
+S11<-data.frame(temp[["signal_final"]])
+names(S11)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S11[,i]<-as.numeric(S11[,i])
+```
+
+Reading S13
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S13.mat")
+```
+
+```{r}
+S13<-data.frame(temp[["signal_final"]])
+names(S13)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S13[,i]<-as.numeric(S13[,i])
+```
+
+Reading S14
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S14.mat")
+
+S14<-data.frame(temp[["signal_final"]])
+names(S14)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S14[,i]<-as.numeric(S14[,i])
+```
+
+Reading S15
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S15.mat")
+
+S15<-data.frame(temp[["signal_final"]])
+names(S15)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S15[,i]<-as.numeric(S15[,i])
+```
+Reading S16
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S16.mat")
+
+S16<-data.frame(temp[["signal_final"]])
+names(S16)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S16[,i]<-as.numeric(S16[,i])
+```
+Reading S17
+```{r}
+
+temp<-read.mat("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD\\S17.mat")
+
+S17<-data.frame(temp[["signal_final"]])
+names(S17)<-c("Signal", "FFT", "Signal_Filtered", "FFT_filtered", "FFT_diff", "time", "Freq")
+for(i in a)
+  S17[,i]<-as.numeric(S17[,i])
+```
+```{r}
+SCR_S2<-data.frame(read.csv2(file = "C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\ledalab-349\\S2_data_csv.csv", header =TRUE, sep="," ))
+
+```
+Trying to read a pickle file in R:
+Using the following link:https://www.ankuroh.com/programming/data-analysis/reading-pickle-file-in-r/
+
+```{r}
+library(reticulate)
+py_install("pandas")
 ```

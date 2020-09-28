@@ -1,0 +1,116 @@
+---
+title: "main2.Rmd"
+output: html_notebook
+---
+Loading the appropriate libraries for the project
+```{r}
+library(psych)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(pracma)
+library(SynchWave)
+library(corrplot)
+library(rmatio)
+library(reticulate)
+library(matlab)
+```
+
+We will first create an interface for reading in the pickle data
+```{r}
+require("reticulate")
+source_python("pickle_reader.py")
+```
+Now creating a list of filenames in the variable filen
+```{r}
+plist<-as.integer(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17))
+```
+```{r}
+root_fold=c("C:\\Users\\COLDD03\\Desktop\\Project_Dataset\\WESAD")
+filen=NA
+a=1
+for (i in plist)
+  {
+  base = paste("S",i, sep="")
+  file = paste("S",i,".pkl",sep="")
+  file_name<-paste(root_fold, base, file, sep="\\")
+  filen<-append(filen[!is.na(filen)], file_name)
+  a=a+1
+}
+```
+All the file-names to be read are stored in the file, now we will sequentially read the corresponding pickle files..And store them in a prescribed format, After that we will apply time windowing and extract the features.
+```{r}
+fs = 700# 700 Hz
+ts = 1/fs#Sampling timene2
+data.raw=list()
+```
+```{r}
+for(i in c(1:length(filen)))#length(filen) replace the end 1 with length(filen)
+ { pickle_data <- read_pickle_file(filen[i])
+  data.raw[[i]]<-data.frame(signal=pickle_data["signal"]$signal$chest$EDA,lab=pickle_data["label"]$label)}
+```
+Renaming the dataframes list
+```{r}
+
+names(data.raw)<-paste0("S", dtest)
+  
+```
+Extracting the Respiban signal from the data.frame
+
+```{r}
+#assign(paste("data.raw.S2$","S",5,sep=""),data.frame(signal=pickle_data["signal"]$signal$chest$EDA, lab = pickle_data["label"]$label))
+
+
+```
+Now creating a dataframe list with per second data sampled at 350 Hz
+```{r}
+fs = 700
+fsorig =700
+len1 = (length(data.raw[[1]]$signal)/fs)
+listparam=list(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+#meanlist = list()
+#minlist = list()
+#maxlist = list()
+#medianlist= list()
+#skewlist = list()
+#kurtosis = list()
+#time=list()
+
+
+```
+```{r}
+delta = fs/fsorig;
+for(i in as.integer(c(1:len1))){
+  listparam[[1]]<-rbind(listparam[[1]], (fs/fsorig)*(i-1))
+  listparam[[2]]<-rbind(listparam[[2]], mean(data.raw[[1]]$signal[((i-1)*fs+1):(i*fs)]))
+  listparam[[3]]<-rbind(listparam[[3]], min(data.raw[[1]]$signal[((i-1)*fs+1):(i*fs)]))
+  listparam[[4]]<-rbind(listparam[[4]], max(data.raw[[1]]$signal[((i-1)*fs+1):(i*fs)]))
+  listparam[[5]]<-rbind(listparam[[5]], median(data.raw[[1]]$signal[((i-1)*fs+1):(i*fs)]))
+  listparam[[6]]<-rbind(listparam[[6]], skew(data.raw[[1]]$signal[((i-1)*fs+1):(i*fs)]))
+  listparam[[7]]<-rbind(listparam[[7]], kurtosi(data.raw[[1]]$signal[((i-1)*fs+1):(i*fs)]))
+  listparam[[8]]<-rbind(listparam[[8]], min(data.raw[[1]]$lab[((i-1)*fs+1):(i*fs)]))
+  
+}
+```
+
+```{r}
+listparam<-data.frame(listparam)
+```
+```{r}
+names(listparam)<-c("TIME", "MEAN", "MIN", "MAX", "MEDIAN", "SKEWNESS", "KURTOSIS", "CONDITION")
+
+```
+Verify if the conditions are correct or false
+```{r}
+unique(listparam$CONDITION)
+  
+```
+```{r}
+processed.data=list()
+```
+```{r}
+processed.data[[1]]<-data.frame(meanlist= as.data.frame(t(meanlist)), minlist = as.data.frame(t(minlist)), maxlist = as.data.frame(t(maxlist)), medianlist= as.data.frame(t(medianlist)), skewlist = as.data.frame(t(skewlist)), kurtosis = as.data.frame(t(kurtosis)))
+```
+
+
+  
